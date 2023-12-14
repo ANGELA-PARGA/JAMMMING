@@ -7,7 +7,8 @@ function SearchResult({resultingSongs, onClickAdd}){
             <div>
                 <Tracklist 
                     songList={resultingSongs}
-                    onClickAdd={onClickAdd}          
+                    onClickAdd={onClickAdd} 
+                    isInPlaylist={false}          
                 />
             </div>
         </div>

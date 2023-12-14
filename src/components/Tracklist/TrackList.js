@@ -1,6 +1,6 @@
 import Track from "../Track/Track";
 
-function TrackList({songList, onClickAdd}){
+function TrackList({songList, onClickAdd, isInPlaylist, onClickRemove}){
     return (
         <div>
             {songList.map((song) => {
@@ -8,8 +8,9 @@ function TrackList({songList, onClickAdd}){
                     <Track
                         song={song}
                         key={song.id}
-                        onAdd={onClickAdd}
-                        
+                        onClickAdd={onClickAdd}
+                        isInPlaylist={isInPlaylist}
+                        onClickRemove={onClickRemove}                      
                     />
                 );
             })}

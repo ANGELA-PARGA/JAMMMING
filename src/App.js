@@ -1,9 +1,8 @@
-import './App.css';
 import { useState } from 'react';
 import SearchBar from './components/SearchBar/SearchBar';
 import SearchResult from './components/SearchResults/SearchResults';
 import Playlist from './components/Playlist/Playlist';
-import songData from './assets/UtilityData';
+import Spotify from './assets/Spotify';
 
 function App() {
   const [search, setSearch] = useState('');
@@ -16,8 +15,7 @@ function App() {
   }
 
   function searchAction(search){
-    setSearchResult(songData.filter((song) =>(song.name.includes(search) || song.album.includes(search))      
-    ))
+    Spotify.search(search).then((searchResult)=> setSearchResult(searchResult))
   }
 
   function addSong(song){    
@@ -38,7 +36,11 @@ function App() {
   }
 
   function handleSubmitPlaylist(e){
-    //not yet//
+    const trackUris = playlist.map((track) => track.uri);
+    Spotify.savePlaylist(playlistName, trackUris).then(() => {
+      setPlaylistName("New Playlist");
+      setPlaylist([]);
+    });
   }
 
   return (
@@ -57,7 +59,7 @@ function App() {
         <div>
           <SearchResult  
             resultingSongs={searchResult} 
-            onClickAdd={addSong}           
+            onClickAdd={addSong}          
           />
           <Playlist
             songList={playlist}

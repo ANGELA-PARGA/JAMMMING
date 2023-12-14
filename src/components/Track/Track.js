@@ -1,8 +1,16 @@
 
-function Track({song, onAdd  }){
-    function handlerOnAdd(){
-        return onAdd(song);                
+function Track({song, onClickAdd, isInPlaylist, onClickRemove}){
+
+    function handleOnClick(){
+        if (isInPlaylist){
+            onClickRemove(song); 
+        } else {
+            onClickAdd(song);
+        }                       
     }
+
+    const actionButton = isInPlaylist ? "-" : "+";
+
     return(
         <div>
             <div>
@@ -12,7 +20,7 @@ function Track({song, onAdd  }){
             <div>
                 <p>{song.duration}</p>
             </div>
-            <button onClick={handlerOnAdd}>+</button>
+            <button onClick={handleOnClick}>{actionButton}</button>
         </div>
     )
 }
