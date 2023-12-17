@@ -1,6 +1,6 @@
 import Track from "../Track/Track";
 
-function Playlist({songList, onClickRemove, inputValue, onInputChange, handleSubmitPlaylist}){
+function Playlist({songList, onClickRemove, inputValue, onInputChange, handleSubmitPlaylist, closePlaylist}){
     
     function handleSubmit(e){
         e.preventDefault();
@@ -9,9 +9,8 @@ function Playlist({songList, onClickRemove, inputValue, onInputChange, handleSub
 
     return (
         <div>
-            <h2>Your Playlist:</h2>
             <form action="" onSubmit={handleSubmit}>
-                <label htmlFor="name">Playlist's name</label>
+                <label htmlFor="name">Set or change the playlist's name</label>
                 <input id='name' type="text" value={inputValue} onChange={onInputChange}/>
                 <div>
                 {songList.map((song) => {
@@ -26,6 +25,7 @@ function Playlist({songList, onClickRemove, inputValue, onInputChange, handleSub
                 })}
                 </div>
                 <button type="submit">SAVE TO SPOTIFY</button>
+                <button onClick={closePlaylist}>CLOSE WITHOUT SAVE</button>
             </form>            
         </div>
     )

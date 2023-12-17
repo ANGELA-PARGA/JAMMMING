@@ -1,3 +1,5 @@
+import styles from './SearchBar.module.css'
+
 function SearchBar({inputValue, onChangeEvent, onButtonClick}){
     
     function handlerOnSubmit(e){
@@ -7,10 +9,20 @@ function SearchBar({inputValue, onChangeEvent, onButtonClick}){
 
     return (
         <div>
-            <form action="" onSubmit={handlerOnSubmit}>
-                <label htmlFor="inputSearch">Write song's name</label>
-                <input id="inputSearch" type="text" value={inputValue} onChange={onChangeEvent}/>
-                <button type='submit'>Search</button>
+            <form 
+                onSubmit={handlerOnSubmit} 
+                className={styles.searchBar}                
+            >
+                <label htmlFor="inputSearch">Write song's name, album or artist</label>
+                <input 
+                    id="inputSearch" 
+                    type="text"
+                    placeholder='Name of the song, album or artist' 
+                    value={inputValue} 
+                    onChange={onChangeEvent}
+                    className={styles.input}
+                />
+                <button type='submit' className={styles.button}>Search</button>
             </form>
         </div>
     )

@@ -1,0 +1,22 @@
+.mainApp{
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    font-family: 'Spline Sans', sans-serif;
+
+}
+
+h1{
+    color:rgb(4, 79, 122);
+    letter-spacing: 5px;
+    font-size: 2rem;
+}
+.tracklist{
+    margin: 0 auto;
+    width: 80%;
+    display: flex;
+    gap: 100px;
+}

@@ -1,7 +1,8 @@
+import styles from './Track.module.css'
 
 function Track({song, onClickAdd, isInPlaylist, onClickRemove}){
 
-    function handleOnClick(){
+    function handleOnClick(e){
         if (isInPlaylist){
             onClickRemove(song); 
         } else {
@@ -12,15 +13,12 @@ function Track({song, onClickAdd, isInPlaylist, onClickRemove}){
     const actionButton = isInPlaylist ? "-" : "+";
 
     return(
-        <div>
-            <div>
-                <h3>{song.name}</h3>
-                <p>{song.artist} | {song.album}</p>
+        <div className={styles.track}>
+            <div className={styles.nameInfoContainer}>
+                <h3 className={styles.name}>{song.name}</h3>
+                <p className={styles.info}>{song.artist} | {song.album}</p>
             </div>
-            <div>
-                <p>{song.duration}</p>
-            </div>
-            <button onClick={handleOnClick}>{actionButton}</button>
+            <button onClick={handleOnClick} className={styles.button}>{actionButton}</button>
         </div>
     )
 }

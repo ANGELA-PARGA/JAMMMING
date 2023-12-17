@@ -1,0 +1,37 @@
+.track{
+    display: flex;
+    flex-direction: flex-start;
+    justify-content: space-between;
+    
+}
+.nameInfoContainer{
+    width: 75%;
+}
+
+.name{
+    color:rgb(4, 79, 122);
+    letter-spacing: 2px;
+    font-size: 1rem;
+}
+
+.info{
+    font-size: 0.8rem;
+    color: rgb(83, 83, 83);
+}
+
+.button{
+    align-self: center;
+    width: fit-content;
+    padding: 5px;
+    font-family: 'Spline Sans', sans-serif;
+    font-weight: 400;
+    color: white;
+    background-color:rgb(5, 112, 173);
+    border: none;
+    border-radius: 0.25rem;
+}
+
+.button:hover{
+    background-color:rgba(92, 9, 245, 0.699);
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+}
