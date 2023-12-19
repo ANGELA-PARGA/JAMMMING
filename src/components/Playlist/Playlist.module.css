@@ -1,0 +1,52 @@
+.playlistContainer{
+    margin: 0 8px;
+}
+
+.playlistForm{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: stretch;
+    gap: 10px; 
+}
+.playlistForm input {
+    min-width: 50%;
+    height: 30px;
+    align-self: center;
+    font-family: 'Work Sans', sans-serif;
+    text-align: center;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    color: rgb(73, 73, 73);
+}
+
+.playlistForm input:hover{
+    background-color:rgb(235, 235, 235);
+    box-shadow: 0 8px 8px 0 rgba(131, 131, 131, 0.034);
+}
+
+.playlistForm label {
+    font-family: 'Work Sans', sans-serif;
+    text-align: center;
+    color: rgb(231, 230, 230);
+}
+
+.buttonSave, .buttonClose{
+    align-self: center;
+    width: fit-content;
+    padding: 10px;
+    font-family: 'Work Sans', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    color: rgb(0, 0, 0);
+    background-color: rgb(61, 199, 96);
+    border: none;
+    border-radius: 5rem;
+    cursor: pointer; 
+}
+
+.buttonSave:hover, .buttonClose:hover{
+    background-color:rgba(240, 240, 240, 0.699);
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+}

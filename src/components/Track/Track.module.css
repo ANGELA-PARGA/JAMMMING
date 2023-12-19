@@ -2,6 +2,7 @@
     display: flex;
     flex-direction: flex-start;
     justify-content: space-between;
+    gap: 5px
     
 }
 .nameInfoContainer{
@@ -9,29 +10,58 @@
 }
 
 .name{
-    color:rgb(4, 79, 122);
-    letter-spacing: 2px;
-    font-size: 1rem;
+    color:rgb(255, 255, 255);
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    font-size: 1.25rem;
 }
 
 .info{
     font-size: 0.8rem;
-    color: rgb(83, 83, 83);
+    font-weight: 500;
+    color: rgb(168, 168, 168);
+    letter-spacing: 0.5px;    
 }
 
-.button{
+.buttonTrack{
     align-self: center;
     width: fit-content;
-    padding: 5px;
-    font-family: 'Spline Sans', sans-serif;
-    font-weight: 400;
-    color: white;
-    background-color:rgb(5, 112, 173);
+    padding: 5px 15px;
+    font-family: 'Work Sans', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 2px;
+    color: rgb(0, 0, 0);
+    background-color: rgb(61, 199, 96);
     border: none;
-    border-radius: 0.25rem;
+    border-radius: 5rem;
+    cursor: pointer;
 }
 
-.button:hover{
-    background-color:rgba(92, 9, 245, 0.699);
+.buttonTrack:hover{
+    background-color:rgba(240, 240, 240, 0.733);
     box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+}
+.playButton{
+    color:  rgb(61, 199, 96);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    align-self: center;
+}
+.playButton:hover{
+    color:  rgba(240, 240, 240, 0.733);
+}
+.notPreviewButton{
+    font-size: 0.5rem;
+    align-self: center;
+    width: fit-content;
+    font-family: 'Work Sans', sans-serif;
+    font-weight: 500;
+    letter-spacing: 2px;
+    color: rgb(0, 0, 0);
+    background-color: rgb(61, 199, 96);
+    border: none;
+    border-radius: 5rem;
 }

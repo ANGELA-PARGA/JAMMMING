@@ -1,6 +1,9 @@
+/*This component render the SavedPlaylist component in a group. It passes a list of
+playlists and a function to render the playlist's tracks*/
+
 import SavedPlaylist from "../SavedPlaylist/SavedPlaylist";
 
-function PlaylistList({playlistsList, savedPlaylistRender}){
+function PlaylistList({playlistsList, renderPlaylistTracks}){
     return (
         <div>
             {playlistsList.map((savedPlaylist) => {
@@ -10,7 +13,7 @@ function PlaylistList({playlistsList, savedPlaylistRender}){
                         name={savedPlaylist.name}
                         key={savedPlaylist.id}
                         id={savedPlaylist.id}
-                        render={savedPlaylistRender}                     
+                        render={renderPlaylistTracks}                     
                     />
                     </>
                 );

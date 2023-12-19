@@ -1,0 +1,31 @@
+.authenticationDiv{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.authenticationButton{
+    width: 150px; 
+    height: 50px;
+    font-family: 'Work Sans', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 2px;
+    color: rgb(0, 0, 0);
+    background-color: rgb(61, 199, 96);
+    border: none;
+    border-radius: 5rem;
+    cursor: pointer;       
+}
+
+.authenticationButton:hover{
+    background-color:rgba(240, 240, 240, 0.952);
+    box-shadow: 0 8px 8px 0 rgba(0,0,0,0.2);
+    width: 155px;
+
+}
+.headerText{
+    font-family: 'Bungee Spice', sans-serif;
+    color: rgb(61, 199, 96);
+}

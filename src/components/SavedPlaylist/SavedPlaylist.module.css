@@ -1,0 +1,25 @@
+.savedPlaylistDiv{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+
+}
+.savedPlaylist {
+    margin: 5px 0;
+    width: 100%;
+    padding: 10px;
+    font-family: 'Work Sans', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    color: rgb(0, 0, 0);
+    background-color: rgba(61, 199, 96, 0.685);
+    border: none;
+    border-radius: 5rem;
+    cursor: pointer; 
+}
+
+.savedPlaylist:hover{
+    background-color:rgba(240, 240, 240, 0.699);
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+}

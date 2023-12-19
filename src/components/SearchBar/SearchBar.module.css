@@ -8,30 +8,36 @@
 .button{
     align-self: center;
     width: 120px;
-    padding: 5px 0;
-    font-family: 'Spline Sans', sans-serif;
-    font-weight: 400;
-    color: white;
-    letter-spacing: 2px;
-    background-color:rgb(5, 112, 173);
+    padding: 10px;
+    font-family: 'Work Sans', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    color: rgb(0, 0, 0);
+    background-color: rgb(61, 199, 96);
     border: none;
-    border-radius: 0.25rem;
+    border-radius: 5rem;
+    cursor: pointer; 
 }
 
 .button:hover{
-    background-color:rgba(92, 9, 245, 0.699);
-    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+    background-color:rgba(240, 240, 240, 0.952);
+    box-shadow: 0 8px 8px 0 rgba(0,0,0,0.2);
+    width: 125px;
 }
 
 .input{
+    width: 300px;
+    height: 30px;
     align-self: center;
-    width:300px;
-    font-family: 'Spline Sans', sans-serif;
+    font-family: 'Work Sans', sans-serif;
     text-align: center;
-    border-radius: 0.25rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    color: rgb(73, 73, 73);
 }
 
 .input:hover{
-    background-color:rgba(165, 165, 165, 0.699);
-    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+    background-color:rgb(235, 235, 235);
+    box-shadow: 0 8px 8px 0 rgba(131, 131, 131, 0.034);
 }
