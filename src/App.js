@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react';
-import Authentication from './components/Authentication/Authentication';
+import { useState, useEffect, useRef } from 'react';
+import AuthenticationLOGIN from './components/Authentication/AuthenticationLOGIN';
+import AuthenticationLOGOUT from './components/Authentication/AuthenticationLOGOUT';
 import SearchBar from './components/SearchBar/SearchBar';
 import SearchResult from './components/SearchResults/SearchResults';
 import Playlist from './components/Playlist/Playlist';
@@ -9,47 +10,78 @@ import PlaylistList from './components/PlaylistList/PlaylistList';
 
 function App() {
 
-  const [authorize, setAuthorize] = useState(false); //login'state use for renderization of components
   const [username, setUsername] = useState('')
-  const [search, setSearch] = useState(''); // search'state, used with Spotify.search to get the Search results
-  const [searchResult, setSearchResult] = useState([]); // set the array of search results.
-  const [playlist, setPlaylist] = useState([]); //set the array of playlists (new or saved playlists)
-  const [playlistName, setPlaylistName] = useState(''); // set the playlist name (new or modified)
-  const [savedPlaylists, setSavedPlaylists] = useState([]) // set the array of a saved playlists
-  const [savedplaylistID, setSavedPlaylistID] = useState(null); // set the id of the selected saved playlist
-  const [savedPlaylistName, setSavedPlaylistName] = useState(''); // set the name of the selected saved playlist
-  const [savedPlaylistURIs, setSavedPlaylistURIs] = useState([]); // set the array of Uris of the selected saved playlist 
+  const [search, setSearch] = useState(''); 
+  const [searchResult, setSearchResult] = useState([]); 
+  const [playlist, setPlaylist] = useState([]); 
+  const [playlistName, setPlaylistName] = useState(''); 
+  const [savedPlaylists, setSavedPlaylists] = useState([]) 
+  const [savedplaylistID, setSavedPlaylistID] = useState(null); 
+  const [savedPlaylistName, setSavedPlaylistName] = useState('');
+  const [savedPlaylistURIs, setSavedPlaylistURIs] = useState([]);
+  const authRequestSent = useRef(false);
+  const authorize = useRef(false);
 
-  //authorization log in and log out functionality
-  useEffect(()=>{    
-    const IsThereAToken = Spotify.getAccessToken();
-    setAuthorize(!!IsThereAToken)
-    if (IsThereAToken){
-      Spotify.getUsername(IsThereAToken).then(username => {
-        setUsername(username);
-      })
-      .catch(error => console.log(`${error} trying to get the user's name`));
-    }    
-  },[])
+
+  useEffect(() => {
+    console.log('el componente se esta montando');
+    const accessToken = Spotify.currentToken.access_token;
+    console.log('este es valor de accessToken antes de inicia', accessToken);
+    console.log(new Date(Spotify.currentToken.expires))
+    console.log(new Date())
+    if (accessToken && new Date() < new Date(Spotify.currentToken.expires)) {
+      console.log('se encontró token y no esta vencido');
+      authorize.current = true;
+      loadUserData(accessToken);
+    } else {
+      console.log('no hay token asi que se busca code en URL');
+      const urlParams = new URLSearchParams(window.location.search);
+      const code = urlParams.get('code');
+      console.log('este es el code de url', code);
+      console.log('este es el token', accessToken);
+      if (code && !accessToken) {
+        console.log('se encontro code se va a llamar a handleAuth');
+        if (!authRequestSent.current){
+          handleAuthorizationCode(code);
+        }
+      }
+    }
+  }, []);
+
+  function handleAuthorizationCode(code){
+    console.log('aqui en handleAuth se cambia authRequest a true y se llamaa handleRedirect');
+    authRequestSent.current = true;
+    Spotify.handleRedirectAfterAuthorization(code).then((tokenGotten) => {
+      console.log('handleRedirect se completo y hay token');
+      if (tokenGotten) {
+        console.log('token existe!');
+        authorize.current = true;
+        loadUserData(tokenGotten);
+      } else {
+        console.error('No se pudo obtener el token');
+      }
+      authRequestSent.current = false;
+      console.log('autheRequest regresa a false', authRequestSent.current);
+    });
+  };
+  
+  function loadUserData(token){
+    Spotify.getUsername(token).then(setUsername);
+    Spotify.getUserPlaylists().then(setSavedPlaylists);
+  };
 
   function logInAction(){
-    Spotify.redirectToAuthorization();   
+    console.log('log in se esta llamando');
+    Spotify.redirectToauthorize();
   }
+    
 
   function logOutAction(){
+    console.log('log out se esta llamando')
     Spotify.logOutAction()
-    setAuthorize(false);
+    authorize.current = false;
+    authRequestSent.current = false;
   }
-
-  //rending saved playlists
-  useEffect(()=>{    
-    if (authorize){ 
-      Spotify.getUserPlaylists().then((arrayOfSavedPlaylist)=>{
-        setSavedPlaylists(arrayOfSavedPlaylist)
-      })
-      .catch(error => console.log(`${error} trying to get the saved playlists`))
-    }
-  },[authorize])
 
   /* searchBar functionality: handleSearchChange set the 'search' state with a term: 'song, artist, album'
   searchAction use the Spotify.search to get the search results and set the state searchResults
@@ -122,16 +154,14 @@ function App() {
   return (
     <div className={styles.mainApp}>
       <header className='headerContainer'>
-        <h1 className={styles.h1}>JAMMMING BROWSER</h1>
-        <Authentication 
-          state={authorize} 
-          logInAction={logInAction} 
-          logOutAction={logOutAction}
-          username={username}
-          />        
+        <h1 className={styles.h1}>JAMMMING BROWSER</h1>        
       </header>
-        {authorize ? (
+        {authorize.current ? (
       <main>
+        <AuthenticationLOGOUT
+          logOutAction={logOutAction}
+          username={username} 
+        />        
         <div>
           <SearchBar 
             inputValue={search} 
@@ -167,7 +197,11 @@ function App() {
           </div>
         </div>
       </main>) : (
-      <></>)}
+      <>
+        <AuthenticationLOGIN 
+          logInAction={logInAction} 
+        />
+      </>)}
     </div>
   );
 }

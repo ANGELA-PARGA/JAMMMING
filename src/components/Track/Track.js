@@ -12,6 +12,7 @@ function Track({song, onClickAdd, isInPlaylist, onClickRemove}){
     const [isTrackPlaying, setIsTrackPlaying] = useState(false);
     const playingRef = useRef(new Audio (song.preview));
 
+
     function audioPlayer(){
         const audio = playingRef.current;
         if(!isTrackPlaying){

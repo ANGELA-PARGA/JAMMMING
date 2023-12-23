@@ -3,30 +3,21 @@ authorization. Also the button modify the state of the app changing the renderiz
 components*/
 import styles from "./Authentication.module.css";
 
-function Authentication({logInAction, logOutAction, state, username}){
+function AuthenticationLOGIN({logInAction}){
 
-    const buttonText= state ? "Log Out" : "Log In";
-    const headerText= state ? `Welcome...${username}`: "To start please log in into your Spotify account";
-
-    function handleOnClick(e){
-        if (state){
-            logOutAction(); 
-        } else {
-            logInAction();
-        }                       
-    }
+    const headerText= "To start please log in into your Spotify account";
 
     return (
         <div className={styles.authenticationDiv}>
             <h2 className={styles.headerText}>{headerText}</h2>
             <button 
-                onClick={handleOnClick} 
+                onClick={logInAction} 
                 className={styles.authenticationButton}
-            >{buttonText}
+            >Log In
             </button>
         </div>
     )
     
 }
 
-export default Authentication;
+export default AuthenticationLOGIN;
