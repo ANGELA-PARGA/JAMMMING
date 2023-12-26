@@ -40,16 +40,21 @@ function App() {
         loadUserData(accessToken);
       } else {
         console.log('esta vencido usar refresh token:', Spotify.currentToken.refresh_token);
-        Spotify.getRefreshToken().then((token)=>{
-          console.log('se logra refrescar token');
-          authorize.current = true;
-          loadUserData(token);
-        }).catch(()=>{
-          console.log('error getting a new token');
-        })       
+        if (!authRequestSent.current){
+          authRequestSent.current = true;
+          console.log('llamando a getRefreshToken');
+          Spotify.getRefreshToken().then((token)=>{
+            console.log('se logra refrescar token');
+            authorize.current = true;
+            loadUserData(token);
+            authRequestSent.current = false;
+          }).catch(()=>{
+            console.log('error getting a new token');
+          })          
+        }               
       }      
     } else {
-      console.log('sno hay token usar URL');
+      console.log('no hay token usar URL');
       const urlParams = new URLSearchParams(window.location.search);
       const code = urlParams.get('code');
       if (code){
