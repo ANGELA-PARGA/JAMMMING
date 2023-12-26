@@ -28,7 +28,19 @@ function App() {
 
   useEffect(() => {
     const accessToken = Spotify.currentToken.access_token;
-    const expireTime = Spotify.currentToken.expires;   
+    const expireTime = Spotify.currentToken.expires; 
+    function handleAuthorizationCode(code){
+      authRequestSent.current = true;
+      Spotify.handleRedirectAfterAuthorization(code).then((tokenGotten) => {
+        if (tokenGotten) {
+          authorize.current = true;
+          loadUserData(tokenGotten);
+        } else {
+          console.error('Error getting the token');
+        }
+        authRequestSent.current = false;
+      });
+    };  
 
     if (accessToken) {
       if (new Date() < expireTime){
@@ -56,20 +68,6 @@ function App() {
       } 
     }       
   },[]);
-
-  /* request the token using the URL code, load the user's data and render the components */
-  function handleAuthorizationCode(code){
-    authRequestSent.current = true;
-    Spotify.handleRedirectAfterAuthorization(code).then((tokenGotten) => {
-      if (tokenGotten) {
-        authorize.current = true;
-        loadUserData(tokenGotten);
-      } else {
-        console.error('Error getting the token');
-      }
-      authRequestSent.current = false;
-    });
-  };
   
   function loadUserData(token){
     Spotify.getUsername(token).then(setUsername);
