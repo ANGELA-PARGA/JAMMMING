@@ -300,7 +300,6 @@ const Spotify = {
     },
 
     async getUserPlaylists(){
-        console.log('llamando a getUserPlaylist:');
         let accessToken = await this.getAccessToken();
         let userID= await this.getUserId(accessToken); 
         
