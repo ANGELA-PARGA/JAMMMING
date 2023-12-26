@@ -12,73 +12,89 @@ function App() {
 
   const [username, setUsername] = useState('')
   const [search, setSearch] = useState(''); 
-  const [searchResult, setSearchResult] = useState([]); 
+  const [searchResult, setSearchResult] = useState([]);
   const [playlist, setPlaylist] = useState([]); 
   const [playlistName, setPlaylistName] = useState(''); 
   const [savedPlaylists, setSavedPlaylists] = useState([]) 
   const [savedplaylistID, setSavedPlaylistID] = useState(null); 
   const [savedPlaylistName, setSavedPlaylistName] = useState('');
   const [savedPlaylistURIs, setSavedPlaylistURIs] = useState([]);
-  const authRequestSent = useRef(false);
-  const authorize = useRef(false);
+  const authRequestSent = useRef(false); //if there's a request running is set to true
+  const authorize = useRef(false); // if it's set to true, it renders the fundamental components
 
+  /* verify if a token exists and if it's valid, then render the components. If not,
+  search for a URL code to request the token. This occurs if the user has been redirected
+  from the Spotify Auth page with the code in the URL */
 
   useEffect(() => {
-    console.log('el componente se esta montando');
     const accessToken = Spotify.currentToken.access_token;
-    console.log('este es valor de accessToken antes de inicia', accessToken);
-    console.log(new Date(Spotify.currentToken.expires))
-    console.log(new Date())
-    if (accessToken && new Date() < new Date(Spotify.currentToken.expires)) {
-      console.log('se encontró token y no esta vencido');
-      authorize.current = true;
-      loadUserData(accessToken);
+    const expireTime = Spotify.currentToken.expires;   
+    console.log('se monta componente');
+
+    if (accessToken) {
+      console.log('hay token');
+      if (new Date() < expireTime){
+        console.log('current time:', new Date());
+        console.log('no esta vencido, expire time:', expireTime);
+        authorize.current = true;
+        loadUserData(accessToken);
+      } else {
+        console.log('esta vencido usar refresh token:', Spotify.currentToken.refresh_token);
+        Spotify.getRefreshToken().then((token)=>{
+          console.log('se logra refrescar token');
+          authorize.current = true;
+          loadUserData(token);
+        }).catch(()=>{
+          console.log('error getting a new token');
+        })       
+      }      
     } else {
-      console.log('no hay token asi que se busca code en URL');
+      console.log('sno hay token usar URL');
       const urlParams = new URLSearchParams(window.location.search);
       const code = urlParams.get('code');
-      console.log('este es el code de url', code);
-      console.log('este es el token', accessToken);
-      if (code && !accessToken) {
-        console.log('se encontro code se va a llamar a handleAuth');
+      if (code){
+        console.log('hay code, verificar si hay auth en curso...');
         if (!authRequestSent.current){
+          console.log('llamar autorizacion');
           handleAuthorizationCode(code);
         }
-      }
-    }
-  }, []);
+      } 
+    }       
+  },[]);
 
+  /* request the token using the URL code, load the user's data and render the components */
   function handleAuthorizationCode(code){
-    console.log('aqui en handleAuth se cambia authRequest a true y se llamaa handleRedirect');
+    console.log('se llama a autorizacion y set authrequest to true');
     authRequestSent.current = true;
     Spotify.handleRedirectAfterAuthorization(code).then((tokenGotten) => {
-      console.log('handleRedirect se completo y hay token');
+      console.log('se completó la autorizacion y hay token');
       if (tokenGotten) {
-        console.log('token existe!');
         authorize.current = true;
         loadUserData(tokenGotten);
       } else {
-        console.error('No se pudo obtener el token');
+        console.error('error getting the token');
       }
+      console.log('se renderizaron los componentes y set authrequest to false');
       authRequestSent.current = false;
-      console.log('autheRequest regresa a false', authRequestSent.current);
     });
   };
   
   function loadUserData(token){
     Spotify.getUsername(token).then(setUsername);
     Spotify.getUserPlaylists().then(setSavedPlaylists);
+    const searchResultsStored = localStorage.getItem('searchResults');
+    if (searchResultsStored){
+      setSearchResult(JSON.parse(searchResultsStored))
+    }
   };
 
   function logInAction(){
-    console.log('log in se esta llamando');
     Spotify.redirectToauthorize();
   }
     
 
   function logOutAction(){
-    console.log('log out se esta llamando')
-    Spotify.logOutAction()
+    Spotify.logOutAction();
     authorize.current = false;
     authRequestSent.current = false;
   }
@@ -90,14 +106,17 @@ function App() {
     setSearch(e.target.value);
   }
   function searchAction(search){
-    Spotify.search(search).then((searchResult)=> {
-      setSearchResult(searchResult)
+    Spotify.search(search).then((searchResults)=> {
+      setSearchResult(searchResults)
+      const searchResultsToSave = JSON.stringify(searchResult);
+      localStorage.setItem('searchResults', searchResultsToSave)
     })
     .catch(error => console.log(`${error} trying to get search results`))    
   }
 
   /*track functionality: add or remove songs from playlist, setting the state of 'playlist' to an array
-  adding Tracks or removing Tracks from the array*/
+  adding or removing Tracks from the array*/
+
   function addSong(song){    
     if (playlist.some((currentSong) => currentSong.id === song.id)){
       return;
@@ -111,11 +130,10 @@ function App() {
   }
 
   /*Playlist functionality: change the playlist's name, update items or save new playlists.
-  Uses Spotify.savePlaylist to save the made changes or the new playlist, then set the related 
-  states to their original states.
-  Uses Spotify.getUserPlaylists to get and render the saved playlists setting the 'savedPlaylist' state
-  to an array of playlists. The function renderSavedPlaylistsTracks render the tracks of a 
-  selected playlist setting the state of playlist to an array of Tracks*/
+  Uses Spotify.savePlaylist to save the changes or the new playlist, then set the related 
+  states to their original states. Uses Spotify.getUserPlaylists to get and render the saved 
+  playlists setting the 'savedPlaylist' state to an array of playlists. The function 
+  renderSavedPlaylistsTracks render the selected playlist's tracks*/
 
   function handleChangeName(e){
     setPlaylistName(e.target.value);

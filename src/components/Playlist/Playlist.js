@@ -1,6 +1,6 @@
 /* this component render the playlist tracks, using the playlist state (it can be tracks added from the 
-    search or tracks from a selected saved playlist). It has a button to remove the track, 
-    another one to save the playlist and one to close the playlist without changes*/
+search, or tracks from a selected saved playlist). It has a button to remove the track, 
+another one to save the playlist and one to close the playlist without changes*/
 
 import Track from "../Track/Track";
 import styles from "./Playlist.module.css";

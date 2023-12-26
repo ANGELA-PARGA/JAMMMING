@@ -1,4 +1,17 @@
-/**/
+/*Handle the API and the functionality of the application:
+1. currentToken: Object with the token information and a function to store it. Set 
+the expiration time.
+2. redirectToauthorize: get the codes using the utilities functions at the bottom
+and request for user authorization (Authorization code with PKCE extension)
+3. handleRedirectAfterAuthorization: uses the URL code to request a token with the callback
+function: getToken
+4. getToken: get the token using the code_verifier, and stored it as an object. It's called
+in handleRedirectAfterAuthorization.
+5. removeCodeFromURL: remove the code from the URL
+6. getAccessToken: return the token when called. If the token is expired, it calls refreshToken
+7. getRefreshToken: get a new token using refresh_token.
+8. logOutAction: clear the storage and redirect the user.
+*/
 const clientID = "3c4a15564c564c63bbd3d896fcd46746";
 const redirectURI = "http://localhost:3000";
 const tokenEndpoint = "https://accounts.spotify.com/api/token";
@@ -37,7 +50,7 @@ const Spotify = {
             localStorage.setItem('expires', expiry);
         }
     },
-    // utilities functions at the bottom
+    
     async redirectToauthorize(){
         const codeVerifier = this.generateRandomString(64);  
         const codeChallenge = await this.generateCodeChallenge(codeVerifier);
@@ -56,20 +69,18 @@ const Spotify = {
     },
 
     async handleRedirectAfterAuthorization() {
-        console.log("!!!!!!!!!!!handleRedirectAfterAuthorization called"); 
+        console.log('se llama handle redirect y se busca codigo');
         const urlParams = new URLSearchParams(window.location.search);
         const code = urlParams.get('code');
-        console.log(`code before the if in handle ${code}`)
         if (code) {
-            console.log(`auth code inside handleredirect ${code}`) //debug 
+            console.log('se encontró code');
             const token = await this.getToken(code);            
             if(token){
+                console.log('se termina getToken y se guarda el token y retorna el access_token');
                 this.currentToken.save(token);
                 this.removeCodeFromURL();
-                console.log(`currentToken token saved ${localStorage.getItem('access_token')}`)
-                console.log(`currentToken refresh token saved ${localStorage.getItem('refresh_token')}`)
-                console.log(`currentToken token saved ${localStorage.getItem('expires_in')}`)
-                console.log(`currentToken token saved ${localStorage.getItem('expires')}`)
+                console.log('access_token:', this.currentToken.access_token);
+                console.log('refresh_token:', this.currentToken.refresh_token);
                 return this.currentToken.access_token;
             } else {
                 console.error("Token not obtained in handleRedirectAfterAuthorization");
@@ -79,8 +90,8 @@ const Spotify = {
     },
 
     async getToken(code) {
+        console.log('se llama gettoken');
         const codeVerifier = localStorage.getItem('code_verifier');
-        console.log(`code from calling of getToken in handleRedirect: ${code}`) //debug 
         try {
             const response = await fetch(tokenEndpoint,{
                 method: 'POST',
@@ -104,8 +115,7 @@ const Spotify = {
                 
             }
             const data = await response.json();
-            sessionStorage.setItem('getTokenResponse', data); //debug 
-            console.log('Complete response obtained:', data);        
+            console.log('respuesta obtenida en getToken:', data);        
             return data;
         } catch (error) {
             console.log('Error fetching the token in getToken:', error)
@@ -121,31 +131,46 @@ const Spotify = {
         console.log(`URL cleaned up: ${updatedUrl}`); // Debug
     },
 
-    async getAccessToken() { 
+    async getAccessToken() {
+        console.log('llamando a getAccessToken:');      
         if (!this.currentToken.access_token){
-            this.redirectToauthorize()
+            await this.redirectToauthorize()
         }
-        if(Date.now() > this.currentToken.expires.getTime()){
+        if(this.currentToken.access_token && Date.now() > this.currentToken.expires.getTime()){
             return await this.getRefreshToken();
         }
         return this.currentToken.access_token;        
     },
 
-    async getRefreshToken() {    
-        const response = await fetch(tokenEndpoint, {
-            method: 'POST',
-            headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
-            },
-            body: new URLSearchParams({
-            grant_type: 'refresh_token',
-            refresh_token: this.currentToken.refresh_token,
-            client_id: clientID
-            }),
-        });
-        const token = await response.json();
-        this.currentToken.save(token)
-        return this.currentToken.access_token;
+    async getRefreshToken() { 
+        console.log('llamando a getAccessRefreshToken:');   
+        try {
+            const response = await fetch(tokenEndpoint, {
+                method: 'POST',
+                headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: new URLSearchParams({
+                grant_type: 'refresh_token',
+                refresh_token: this.currentToken.refresh_token,
+                client_id: clientID
+                }),
+            });
+            if(!response.ok){
+                console.error('Response status:', response.status);
+                console.error('Response status text:', response.statusText);
+                const errorResponse = await response.text();
+                console.error('Response body:', errorResponse);
+                throw new Error('Failed to refresh token');
+            }
+            const token = await response.json();
+            this.currentToken.save(token)
+            console.log('se logro getAccessRefreshToken:', this.currentToken.refresh_token, this.currentToken.access_token);
+            return this.currentToken.access_token;
+        } catch (error){
+            console.error('Error refreshing token:', error);
+            this.redirectToauthorize();
+        }          
     },
 
     logOutAction() {
@@ -154,6 +179,7 @@ const Spotify = {
     },
 
     async getUserId(token){
+        console.log('llamando a getUserID:');
         try {
             const response = await fetch(`https://api.spotify.com/v1/me`, {
                 headers: {Authorization: `Bearer ${token}`}
@@ -173,6 +199,7 @@ const Spotify = {
     },
 
     async getUsername(token){
+        console.log('llamando a getUsername:');
         let userID= await this.getUserId(token);
         try {
             const retrievengUserName = await fetch(`https://api.spotify.com/v1/users/${userID}`, {
@@ -189,6 +216,7 @@ const Spotify = {
     },
 
     async search(term) {
+        console.log('llamando a search:');
         let accessToken = await this.getAccessToken();
         const response = await fetch(`https://api.spotify.com/v1/search?type=track&q=${term}`, {
             headers: {
@@ -286,6 +314,7 @@ const Spotify = {
     },
 
     async getUserPlaylists(){
+        console.log('llamando a getUserPlaylist:');
         let accessToken = await this.getAccessToken();
         let userID= await this.getUserId(accessToken); 
         
@@ -340,7 +369,7 @@ const Spotify = {
         }  
     },
 
-    // utilities methods//
+    // utilities methods for the Authorization code with PKCE extension//
     generateRandomString(length) {
         const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
         let text = '';

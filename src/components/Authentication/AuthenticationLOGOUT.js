@@ -1,6 +1,6 @@
-/*This component is used to render a button for log out and accept the Spotify conditions for
-authorization. Also the button modify the state of the app changing the renderization of some
-components*/
+/*This component is used to render a button for log out. 
+When clicked modify the state of the app changing the renderization of some
+components,  and the function clear the local Storage*/
 import styles from "./Authentication.module.css";
 
 function AuthenticationLOGOUT({logOutAction, username}){

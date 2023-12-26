@@ -1,6 +1,6 @@
-/*This component is used to render a button for log in and accept the Spotify conditions for
-authorization. Also the button modify the state of the app changing the renderization of some
-components*/
+/*This component is used to render a button for login, redirect the user to the Spotify authorization
+page*/
+
 import styles from "./Authentication.module.css";
 
 function AuthenticationLOGIN({logInAction}){
