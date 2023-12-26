@@ -69,18 +69,13 @@ const Spotify = {
     },
 
     async handleRedirectAfterAuthorization() {
-        console.log('se llama handle redirect y se busca codigo');
         const urlParams = new URLSearchParams(window.location.search);
         const code = urlParams.get('code');
         if (code) {
-            console.log('se encontró code');
             const token = await this.getToken(code);            
             if(token){
-                console.log('se termina getToken y se guarda el token y retorna el access_token');
                 this.currentToken.save(token);
                 this.removeCodeFromURL();
-                console.log('access_token:', this.currentToken.access_token);
-                console.log('refresh_token:', this.currentToken.refresh_token);
                 return this.currentToken.access_token;
             } else {
                 console.error("Token not obtained in handleRedirectAfterAuthorization");
@@ -90,7 +85,6 @@ const Spotify = {
     },
 
     async getToken(code) {
-        console.log('se llama gettoken');
         const codeVerifier = localStorage.getItem('code_verifier');
         try {
             const response = await fetch(tokenEndpoint,{
@@ -114,8 +108,7 @@ const Spotify = {
                 return null;
                 
             }
-            const data = await response.json();
-            console.log('respuesta obtenida en getToken:', data);        
+            const data = await response.json();       
             return data;
         } catch (error) {
             console.log('Error fetching the token in getToken:', error)
@@ -128,11 +121,9 @@ const Spotify = {
         url.searchParams.delete("code");
         const updatedUrl = url.toString();
         window.history.replaceState({}, document.title, updatedUrl);
-        console.log(`URL cleaned up: ${updatedUrl}`); // Debug
     },
 
-    async getAccessToken() {
-        console.log('llamando a getAccessToken:');      
+    async getAccessToken() {     
         if (!this.currentToken.access_token){
             await this.redirectToauthorize()
         }
@@ -142,8 +133,7 @@ const Spotify = {
         return this.currentToken.access_token;        
     },
 
-    async getRefreshToken() { 
-        console.log('llamando a getAccessRefreshToken:');   
+    async getRefreshToken() {  
         try {
             const response = await fetch(tokenEndpoint, {
                 method: 'POST',
@@ -165,7 +155,6 @@ const Spotify = {
             }
             const token = await response.json();
             this.currentToken.save(token)
-            console.log('se logro getAccessRefreshToken:', this.currentToken.refresh_token, this.currentToken.access_token);
             return this.currentToken.access_token;
         } catch (error){
             console.error('Error refreshing token:', error);
@@ -179,7 +168,6 @@ const Spotify = {
     },
 
     async getUserId(token){
-        console.log('llamando a getUserID:');
         try {
             const response = await fetch(`https://api.spotify.com/v1/me`, {
                 headers: {Authorization: `Bearer ${token}`}
@@ -199,7 +187,6 @@ const Spotify = {
     },
 
     async getUsername(token){
-        console.log('llamando a getUsername:');
         let userID= await this.getUserId(token);
         try {
             const retrievengUserName = await fetch(`https://api.spotify.com/v1/users/${userID}`, {
@@ -216,7 +203,6 @@ const Spotify = {
     },
 
     async search(term) {
-        console.log('llamando a search:');
         let accessToken = await this.getAccessToken();
         const response = await fetch(`https://api.spotify.com/v1/search?type=track&q=${term}`, {
             headers: {
@@ -281,7 +267,7 @@ const Spotify = {
                     }  
                     return modifyingPlaylist;        
                 }catch(error){
-                    console.log('Error saving the modified playlist in Spotify:', error)
+                    console.log('Error storing the modified playlist in Spotify:', error)
                     throw error;
                 }
             }

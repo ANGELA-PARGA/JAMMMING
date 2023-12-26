@@ -29,38 +29,28 @@ function App() {
   useEffect(() => {
     const accessToken = Spotify.currentToken.access_token;
     const expireTime = Spotify.currentToken.expires;   
-    console.log('se monta componente');
 
     if (accessToken) {
-      console.log('hay token');
       if (new Date() < expireTime){
-        console.log('current time:', new Date());
-        console.log('no esta vencido, expire time:', expireTime);
         authorize.current = true;
         loadUserData(accessToken);
       } else {
-        console.log('esta vencido usar refresh token:', Spotify.currentToken.refresh_token);
         if (!authRequestSent.current){
           authRequestSent.current = true;
-          console.log('llamando a getRefreshToken');
           Spotify.getRefreshToken().then((token)=>{
-            console.log('se logra refrescar token');
             authorize.current = true;
             loadUserData(token);
             authRequestSent.current = false;
           }).catch(()=>{
-            console.log('error getting a new token');
+            console.log('Error getting a new token');
           })          
         }               
       }      
     } else {
-      console.log('no hay token usar URL');
       const urlParams = new URLSearchParams(window.location.search);
       const code = urlParams.get('code');
       if (code){
-        console.log('hay code, verificar si hay auth en curso...');
         if (!authRequestSent.current){
-          console.log('llamar autorizacion');
           handleAuthorizationCode(code);
         }
       } 
@@ -69,17 +59,14 @@ function App() {
 
   /* request the token using the URL code, load the user's data and render the components */
   function handleAuthorizationCode(code){
-    console.log('se llama a autorizacion y set authrequest to true');
     authRequestSent.current = true;
     Spotify.handleRedirectAfterAuthorization(code).then((tokenGotten) => {
-      console.log('se completó la autorizacion y hay token');
       if (tokenGotten) {
         authorize.current = true;
         loadUserData(tokenGotten);
       } else {
-        console.error('error getting the token');
+        console.error('Error getting the token');
       }
-      console.log('se renderizaron los componentes y set authrequest to false');
       authRequestSent.current = false;
     });
   };
