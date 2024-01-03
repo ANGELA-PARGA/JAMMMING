@@ -13,7 +13,7 @@ in handleRedirectAfterAuthorization.
 8. logOutAction: clear the storage and redirect the user.
 */
 const clientID = "3c4a15564c564c63bbd3d896fcd46746";
-const redirectURI = "http://localhost:3000";
+const redirectURI = "https://jammmingbrowser.netlify.app";
 const tokenEndpoint = "https://accounts.spotify.com/api/token";
 const authUrl = new URL("https://accounts.spotify.com/authorize")
 const scope = [
