@@ -59,7 +59,7 @@ function Track({song, onClickAdd, isInPlaylist, onClickRemove}){
                 <h3 className={styles.name}>{song.name}</h3>
                 <p className={styles.info}>{song.artist} | {song.album} | {changeToMinutes(song.duration)}</p>
             </div>
-            { song.preview ? (
+            { song.preview && !isInPlaylist ? (
                 <button onClick={audioPlayer} className={styles.playButton}>{currentlyButton()}</button>
             ) : (
                 <button className={styles.notPreviewButton}>preview unavailable</button>
