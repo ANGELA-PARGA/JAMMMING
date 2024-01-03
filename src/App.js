@@ -9,6 +9,7 @@ import styles from './App.module.css';
 import PlaylistList from './components/PlaylistList/PlaylistList';
 
 function App() {
+  console.log('el componente App se montó')
   const [username, setUsername] = useState('')
   const [search, setSearch] = useState(''); 
   const [searchResult, setSearchResult] = useState([]);
@@ -26,7 +27,6 @@ function App() {
   from the Spotify Auth page with the code in the URL */
 
   useEffect(() => {
-    console.log('el componente se montó')
     const accessToken = Spotify.currentToken.access_token;
     const expireTime = Spotify.currentToken.expires; 
     function handleAuthorizationCode(code){

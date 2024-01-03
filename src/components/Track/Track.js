@@ -9,6 +9,7 @@ import styles from './Track.module.css';
 import { useRef } from 'react';
 
 function Track({song, onClickAdd, isInPlaylist, onClickRemove}){
+    console.log('el componente Track se montó')
 
     const playingRef = useRef(new Audio (song.preview));
     const isTrackPlaying = useRef(false)
