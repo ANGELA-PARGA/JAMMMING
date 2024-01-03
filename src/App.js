@@ -192,9 +192,9 @@ function App() {
             <h2>{!playlistName ? `My new Playlist`: playlistName}</h2>
             <Playlist
               songList={playlist}
-              onClickRemove={removeSong}
               inputValue={playlistName} 
-              onInputChange={handleChangeName}
+              onClickRemove={removeSong}
+              onInputChange={handleChangeName}            
               handleSubmitPlaylist={handleSubmitPlaylist}
               closePlaylist={closePlaylist}
               isTrackPlaying={isTrackPlaying}

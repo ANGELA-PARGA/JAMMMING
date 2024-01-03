@@ -7,6 +7,7 @@ import styles from "./Playlist.module.css";
 
 function Playlist({songList, onClickRemove, inputValue, onInputChange, handleSubmitPlaylist, closePlaylist, isTrackPlaying, setIsTrackPlaying}){
     console.log('el componente Playlist se montó')
+    
     function handleSubmit(e){
         e.preventDefault();
         return handleSubmitPlaylist(e);
@@ -28,7 +29,7 @@ function Playlist({songList, onClickRemove, inputValue, onInputChange, handleSub
                 <Tracklist 
                     songList={songList}
                     onClickRemove={onClickRemove} 
-                    isInPlaylist={false}
+                    isInPlaylist={true}
                     isTrackPlaying={isTrackPlaying} 
                     setIsTrackPlaying ={setIsTrackPlaying}         
                 />
