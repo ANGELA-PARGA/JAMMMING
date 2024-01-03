@@ -19,7 +19,6 @@ function App() {
   const [savedplaylistID, setSavedPlaylistID] = useState(null); 
   const [savedPlaylistName, setSavedPlaylistName] = useState('');
   const [savedPlaylistURIs, setSavedPlaylistURIs] = useState([]);
-  const [isTrackPlaying, setIsTrackPlaying] = useState(false);
   const authRequestSent = useRef(false); //if there's a request running is set to true
   const authorize = useRef(false); // if it's set to true, it renders the fundamental components
 
@@ -183,9 +182,7 @@ function App() {
             <h2>Results</h2>
             <SearchResult  
               resultingSongs={searchResult} 
-              onClickAdd={addSong}
-              isTrackPlaying={isTrackPlaying}
-              setIsTrackPlaying={setIsTrackPlaying}    
+              onClickAdd={addSong}    
             />
           </div>
           <div className={styles.playlist}>
@@ -196,9 +193,7 @@ function App() {
               onClickRemove={removeSong}
               onInputChange={handleChangeName}            
               handleSubmitPlaylist={handleSubmitPlaylist}
-              closePlaylist={closePlaylist}
-              isTrackPlaying={isTrackPlaying}
-              setIsTrackPlaying={setIsTrackPlaying} 
+              closePlaylist={closePlaylist} 
             />
           </div>
           <div className={styles.savedPlaylists}>

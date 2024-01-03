@@ -5,7 +5,7 @@ another one to save the playlist and one to close the playlist without changes*/
 import Tracklist from '..//Tracklist/TrackList';
 import styles from "./Playlist.module.css";
 
-function Playlist({songList, onClickRemove, inputValue, onInputChange, handleSubmitPlaylist, closePlaylist, isTrackPlaying, setIsTrackPlaying}){
+function Playlist({songList, onClickRemove, inputValue, onInputChange, handleSubmitPlaylist, closePlaylist}){
     console.log('el componente Playlist se montó')
     
     function handleSubmit(e){
@@ -29,9 +29,7 @@ function Playlist({songList, onClickRemove, inputValue, onInputChange, handleSub
                 <Tracklist 
                     songList={songList}
                     onClickRemove={onClickRemove} 
-                    isInPlaylist={true}
-                    isTrackPlaying={isTrackPlaying} 
-                    setIsTrackPlaying ={setIsTrackPlaying}         
+                    isInPlaylist={true}         
                 />
                 </div>
                 <button type="submit" className={styles.buttonSave}>SAVE TO SPOTIFY</button>

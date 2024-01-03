@@ -6,10 +6,10 @@ keep tracksa reference of the audio*/
 import { UilPlayCircle } from '@iconscout/react-unicons';
 import { UilPauseCircle } from '@iconscout/react-unicons';
 import styles from './Track.module.css';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 
-function Track({song, isInPlaylist, onClickAdd, onClickRemove, isTrackPlaying, setIsTrackPlaying}){
-    
+function Track({song, isInPlaylist, onClickAdd, onClickRemove}){
+    const [isTrackPlaying, setIsTrackPlaying] = useState(false);
     const playingRef = useRef(new Audio (song.preview));
 
     function audioPlayer(){
