@@ -4,7 +4,7 @@ belongs to Search Results) or remove the track if belongs to Playlist*/
 
 import Track from "../Track/Track";
 
-function TrackList({songList, onClickAdd, isInPlaylist, onClickRemove}){
+function TrackList({songList, onClickAdd, isInPlaylist, onClickRemove, isTrackPlaying, setIsTrackPlaying}){
     return (
         <div>
             {songList.map((song) => {
@@ -14,7 +14,9 @@ function TrackList({songList, onClickAdd, isInPlaylist, onClickRemove}){
                         key={song.id}
                         onClickAdd={onClickAdd}
                         isInPlaylist={isInPlaylist}
-                        onClickRemove={onClickRemove}                      
+                        onClickRemove={onClickRemove}
+                        isTrackPlaying={isTrackPlaying}
+                        setIsTrackPlaying={setIsTrackPlaying}
                     />
                 );
             })}

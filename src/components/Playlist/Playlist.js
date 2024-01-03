@@ -2,10 +2,10 @@
 search, or tracks from a selected saved playlist). It has a button to remove the track, 
 another one to save the playlist and one to close the playlist without changes*/
 
-import Track from "../Track/Track";
+import Tracklist from '..//Tracklist/TrackList';
 import styles from "./Playlist.module.css";
 
-function Playlist({songList, onClickRemove, inputValue, onInputChange, handleSubmitPlaylist, closePlaylist}){
+function Playlist({songList, onClickRemove, inputValue, onInputChange, handleSubmitPlaylist, closePlaylist, isTrackPlaying, setIsTrackPlaying}){
     console.log('el componente Playlist se montó')
     function handleSubmit(e){
         e.preventDefault();
@@ -25,16 +25,13 @@ function Playlist({songList, onClickRemove, inputValue, onInputChange, handleSub
                     maxLength={30}
                 />
                 <div>
-                {songList.map((song) => {
-                    return (
-                        <Track
-                            song={song}
-                            key={song.id}
-                            onClickRemove={onClickRemove}
-                            isInPlaylist={true}
-                        />
-                    );
-                })}
+                <Tracklist 
+                    songList={songList}
+                    onClickRemove={onClickRemove} 
+                    isInPlaylist={false}
+                    isTrackPlaying={isTrackPlaying} 
+                    setIsTrackPlaying ={setIsTrackPlaying}         
+                />
                 </div>
                 <button type="submit" className={styles.buttonSave}>SAVE TO SPOTIFY</button>
                 <button onClick={closePlaylist} className={styles.buttonClose}>CLOSE WITHOUT SAVE</button>
