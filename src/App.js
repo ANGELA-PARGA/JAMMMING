@@ -27,6 +27,7 @@ function App() {
   from the Spotify Auth page with the code in the URL */
 
   useEffect(() => {
+    console.log('useEffect se llamó')
     const accessToken = Spotify.currentToken.access_token;
     const expireTime = Spotify.currentToken.expires; 
     function handleAuthorizationCode(code){
@@ -70,6 +71,7 @@ function App() {
   },[]);
   
   function loadUserData(token){
+    console.log('se cargaron datos del usuario')
     Spotify.getUsername(token).then(setUsername);
     Spotify.getUserPlaylists().then(setSavedPlaylists);
     const searchResultsStored = localStorage.getItem('searchResults');
@@ -107,13 +109,15 @@ function App() {
   /*track functionality: add or remove songs from playlist, setting the state of 'playlist' to an array
   adding or removing Tracks from the array*/
 
-  function addSong(song){    
+  function addSong(song){   
+    console.log('se agregó canción') 
     if (playlist.some((currentSong) => currentSong.id === song.id)){
       return;
     }
     setPlaylist((prevPlayList) => [...prevPlayList, song])
   }
   function removeSong(song){
+    console.log('se borró canción')
     setPlaylist((prevPlayList) => 
       prevPlayList.filter((currentSong) => currentSong.id !== song.id )
     )
@@ -126,10 +130,12 @@ function App() {
   renderSavedPlaylistsTracks render the selected playlist's tracks*/
 
   function handleChangeName(e){
+    console.log('ese cambiará el nombre de una playlist')
     setPlaylistName(e.target.value);
   }
 
   function handleSubmitPlaylist(){
+    console.log('se va a guardar una playlist')
     const trackUris = playlist.map((track) => track.uri);
     Spotify.savePlaylist(playlistName, trackUris, savedplaylistID, savedPlaylistName, savedPlaylistURIs).then(() => {
       setPlaylistName("");
@@ -144,6 +150,7 @@ function App() {
   }
 
   function renderSavedPlaylistsTracks(id, name){
+    console.log('se renderizo una playlist guardada')
     Spotify.getPlaylistsTracks(id).then((savedPlaylistTracks)=>{
       setPlaylist(savedPlaylistTracks);
       setPlaylistName(name);
@@ -155,6 +162,7 @@ function App() {
   }
 
   function closePlaylist(){
+    console.log('se llamo closePlaylist')
     setPlaylistName("");
     setPlaylist([]);
   }
@@ -181,7 +189,7 @@ function App() {
           <div className={styles.results}>
             <h2>Results</h2>
             <SearchResult  
-              resultingSongs={searchResult} 
+              songList={searchResult} 
               onClickAdd={addSong}    
             />
           </div>
