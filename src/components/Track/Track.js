@@ -22,7 +22,9 @@ function Track({song, isInPlaylist, onClickAdd, onClickRemove}){
             audio.pause();
             console.log('se llamó pause')
         }
-        setIsTrackPlaying(!isTrackPlaying)
+        if (isTrackPlaying !== !isTrackPlaying) {
+            setIsTrackPlaying(!isTrackPlaying);
+        }
     }
 
     function currentlyButton(){
