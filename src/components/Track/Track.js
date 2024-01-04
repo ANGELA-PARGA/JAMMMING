@@ -11,8 +11,9 @@ import { useRef, useState } from 'react';
 function Track({song, isInPlaylist, onClickAdd, onClickRemove}){
     const [isTrackPlaying, setIsTrackPlaying] = useState(false);
     const playingRef = useRef(new Audio (song.preview));
-
-    function audioPlayer(){
+    
+    function audioPlayer(e){
+        e.stopPropagation();
         console.log('se esta llamando audioplayer')
         const audio = playingRef.current;
         if(!isTrackPlaying){            
@@ -22,9 +23,7 @@ function Track({song, isInPlaylist, onClickAdd, onClickRemove}){
             audio.pause();
             console.log('se llamó pause')
         }
-        if (isTrackPlaying !== !isTrackPlaying) {
-            setIsTrackPlaying(!isTrackPlaying);
-        }
+        setIsTrackPlaying(!isTrackPlaying)
     }
 
     function currentlyButton(){
