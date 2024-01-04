@@ -13,8 +13,9 @@ function Track({song, isInPlaylist, onClickAdd, onClickRemove}){
     const playingRef = useRef(new Audio (song.preview));
     
     function audioPlayer(e){
+        e.preventDefault();
         e.stopPropagation();
-        console.log('se esta llamando audioplayer')
+        console.log('se esta llamando audioplayer con los cambios hechos')
         const audio = playingRef.current;
         if(!isTrackPlaying){            
             audio.play();
