@@ -33,8 +33,8 @@ function Playlist({songList, onClickRemove, inputValue, onInputChange, handleSub
                 />
                 </div>
                 <button type="submit" className={styles.buttonSave}>SAVE TO SPOTIFY</button>
-                <button onClick={closePlaylist} className={styles.buttonClose}>CLOSE WITHOUT SAVE</button>
-            </form>            
+            </form>
+            <button onClick={closePlaylist} className={styles.buttonClose}>CLOSE WITHOUT SAVE</button>            
         </div>
     )
 
