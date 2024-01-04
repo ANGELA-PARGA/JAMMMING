@@ -15,14 +15,12 @@ function Track({song, isInPlaylist, onClickAdd, onClickRemove}){
     function audioPlayer(e){
         e.preventDefault();
         e.stopPropagation();
-        console.log('se esta llamando audioplayer con los cambios hechos')
+        
         const audio = playingRef.current;
         if(!isTrackPlaying){            
             audio.play();
-            console.log('se llamó play')
         } else {
             audio.pause();
-            console.log('se llamó pause')
         }
         setIsTrackPlaying(!isTrackPlaying)
     }

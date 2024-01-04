@@ -4,7 +4,7 @@ import Tracklist from '..//Tracklist/TrackList'
 import styles from './Searchresults.module.css'
 
 function SearchResult({songList, onClickAdd}){
-    console.log('el componente Searchresults se montó')
+
     return (
         <div className={styles.resultsContainer}>
             <Tracklist 

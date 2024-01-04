@@ -6,7 +6,6 @@ import Tracklist from '..//Tracklist/TrackList';
 import styles from "./Playlist.module.css";
 
 function Playlist({songList, onClickRemove, inputValue, onInputChange, handleSubmitPlaylist, closePlaylist}){
-    console.log('el componente Playlist se montó')
     
     function handleSubmit(e){
         e.preventDefault();
